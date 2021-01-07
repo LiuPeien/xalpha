@@ -137,11 +137,13 @@ class scheduled_window(scheduled):
             current date is 2021-01-07. In this example, the window width is 3, because there are three
             trading days in this window, the window dist for current date is 1, because there is only
             one trading date after 2021-01-06 and up to 2021-01-07.
-        :param piece: list of tuples, eg.[(-3,2),(0,1),(3,0.5)]. In this example, it means if the
-            fund netvalue rise in the range of (-100%, -3%], we will buy 2*totmoney,
-            if the fund netvalue rise in the range of (-3%, 0%], we will buy 1*totmoney,
-            if the fund netvalue rise in the range of (0%, 3%], we will buy 0.5*totmoney,
-            if the fund netvalue rise in the range of (3%, +infinity), then no purchase happen at all.
+        :param piece: list of tuples (rise_percent(RP), buy_multiple(BM)).
+            eg.[(-3,2),(0,1),(3,0.5)]. In this example, we can convert it to a piecewise function as
+            BM = {2,-100%<RP<=-3%; 1,-3%<RP<=0%; 0.5,0%<RP<=3%; 0,RP>3%}.
+            If the fund netvalue rise in the range of (-100%, -3%], the BM=2, we will buy 2*totmoney,
+            if the fund netvalue rise in the range of (-3%, 0%], the BM=1, we will buy 1*totmoney,
+            if the fund netvalue rise in the range of (0%, 3%], the BM=0.5, we will buy 0.5*totmoney,
+            if the fund netvalue rise in the range of (3%, +infinity), the BM=0, then no purchase happen at all.
         :param method: MAX, MIN, AVG, default value is AVG. It means how we process the data in the window.
         """
         self.window = window
